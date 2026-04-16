@@ -1,0 +1,53 @@
+---
+
+# ==============================
+# UPDATE UBUNTU SYSTEMS
+# ==============================
+- name: Update apt packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+  when: ansible_os_family == "Debian"
+  ignore_errors: yes
+  tags: update
+
+# ==============================
+# UPDATE REDHAT SYSTEMS
+# ==============================
+- name: Update yum packages
+  yum:
+    name: '*'
+    state: latest
+  when: ansible_os_family == "RedHat"
+  ignore_errors: yes
+  tags: update
+
+# ==============================
+# CHECK REBOOT REQUIREMENT
+# ==============================
+- name: Check if reboot is required (Ubuntu)
+  stat:
+    path: "{{ reboot_required_file_ubuntu }}"
+  register: reboot_required
+  when: ansible_os_family == "Debian"
+
+# ==============================
+# REBOOT IF REQUIRED
+# ==============================
+- name: Reboot system if required
+  reboot:
+    msg: "Reboot initiated by Ansible for patching"
+    connect_timeout: 5
+    reboot_timeout: 600
+  when:
+    - ansible_os_family == "Debian"
+    - reboot_required.stat.exists == true
+  tags: reboot
+
+# ==============================
+# LOG OUTPUT
+# ==============================
+- name: Show update result
+  debug:
+    msg: "System updated successfully on {{ inventory_hostname }}"
+  tags: log

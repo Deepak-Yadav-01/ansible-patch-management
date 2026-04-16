@@ -1,0 +1,8 @@
+---
+- name: Patch Management for Linux Servers
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - patch
