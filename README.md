@@ -68,12 +68,6 @@ ansible-playbook -i inventory/hosts.ini playbook.yml --ask-become-pass
 ---
 
 
-## 💼 Resume Highlight
-
-Automated patch management across Linux servers using Ansible, including OS-based logic, conditional reboot handling, and error management to ensure reliable and scalable system updates.
-
----
-
 ## 👤 Author
 
 DEEPAK YADAV
